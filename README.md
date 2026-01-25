@@ -5,8 +5,11 @@
 A comprehensive **Edge AI application** for real-time fall detection using Raspberry Pi. The system employs dual-mode detection (video and audio) to accurately identify falls and provide immediate alerts through a web-based monitoring interface.
 
 **Module:** Edge AI
+
 **Platform:** Raspberry Pi 5
+
 **Detection Modes:** Video-based (Computer Vision) + Audio-based (Sound Analysis)
+
 **Deployment:** Edge Computing with Cloud Integration
 
 
