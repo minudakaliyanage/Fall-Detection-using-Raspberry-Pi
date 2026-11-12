@@ -1,4 +1,32 @@
-# Fall Detection System using Edge AI
+<div align="center">
+
+# 🧓 Fall Detection System using Edge AI
+
+**Real-time, dual-mode (video + audio) fall detection running on a Raspberry Pi 5, with cloud alerts and a live web dashboard.**
+
+![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi%205-A22846?style=flat-square&logo=raspberrypi&logoColor=white)
+![TensorFlow Lite](https://img.shields.io/badge/TensorFlow%20Lite-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)
+![YOLOv5](https://img.shields.io/badge/YOLOv5-00FFFF?style=flat-square&logo=yolo&logoColor=black)
+![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![AWS S3](https://img.shields.io/badge/AWS%20S3-569A31?style=flat-square&logo=amazons3&logoColor=white)
+
+| 🎯 Test accuracy (video model) | 📦 Edge model size | ⚡ Quantization |
+|:-:|:-:|:-:|
+| **96.59%** | **9.5 MB** (TFLite) | **Full INT8** |
+
+</div>
+
+```mermaid
+flowchart LR
+    subgraph Pi["🍓 Raspberry Pi 5"]
+        CAM[Camera] --> Y[YOLOv5s<br/>person detection] --> CROP[Crop 128×128] --> M[MobileNetV2<br/>INT8 TFLite]
+        MIC[Microphone] --> SPEC[Spectrogram 64×64] --> A[Audio CNN]
+    end
+    M -- fall --> S3[(AWS S3<br/>evidence)]
+    A -- fall --> S3
+    S3 --> DASH[Next.js dashboard<br/>alerts · screenshots · audio]
+```
 
 ## 📋 Project Overview
 
@@ -110,7 +138,7 @@ Fall-Detection-using-Raspberry-Pi/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/minudakaliyanage/Fall-Detection-using-Raspberry-Pi.git
    cd Fall-Detection-using-Raspberry-Pi
    ```
 
@@ -160,11 +188,22 @@ npm run dev
 ## 📊 Model Information
 
 ### Video Detection Model
-- **Architecture:** Custom CNN optimized for fall detection
-- **Format:** TensorFlow Lite (.tflite)
-- **Input:** 128x128 RGB images
+- **Architecture:** MobileNetV2 (ImageNet weights), last 20 layers fine-tuned
+- **Format:** TensorFlow Lite (.tflite), 9.5 MB
+- **Input:** 128x128 RGB person crops (from YOLOv5 bounding boxes)
 - **Output:** Binary classification (Fall/Non-Fall)
-- **Optimization:** Quantized for edge deployment
+- **Optimization:** Full INT8 post-training quantization for edge deployment
+- **Test accuracy:** **96.59%** (test loss 0.293)
+
+<p align="center">
+  <img src="assets/training_curves.png" width="760" alt="Training vs validation loss and accuracy for the video fall classifier"/>
+  <br/><sub>Training vs validation loss / accuracy of the MobileNetV2 fall classifier</sub>
+</p>
+
+<p align="center">
+  <img src="assets/sample_frame.jpg" width="420" alt="Sample indoor CCTV-style frame used by the system"/>
+  <br/><sub>Example camera frame of the kind the video detector processes</sub>
+</p>
 
 ### Audio Detection Model
 - **Architecture:** CNN with spectrogram input
@@ -217,13 +256,12 @@ npm run dev
 ## 📈 Performance Metrics
 
 ### Model Performance
-- **Video Model:** Optimized for real-time inference
-- **Audio Model:** High accuracy on spectrogram features
-- **Inference Speed:** < 100ms per frame (video)
-- **Latency:** < 3 seconds (audio)
+- **Video Model:** 96.59% test accuracy (MobileNetV2, INT8 TFLite)
+- **Audio Model:** Several CNN variants trained with GroupKFold cross-validation (see `sound-detection-model/`)
+- **Audio window:** 3-second clips
 
 ### Edge Optimization
-- **Model Size:** TensorFlow Lite models < 10MB
+- **Model Size:** Video model 9.5 MB as INT8 TFLite (vs 21 MB Keras `.h5`)
 - **Memory Usage:** Optimized for Raspberry Pi constraints
 - **CPU Usage:** Efficient inference on ARM processor
 
