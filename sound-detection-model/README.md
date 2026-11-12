@@ -7,24 +7,24 @@ This directory contains the audio-based fall detection system using spectrogram 
 ## 📁 Contents
 
 ### Model Files
-- **best_model.keras** - Primary trained model
-- **best_model2.keras** - Alternative model variant
-- **best_model3.keras** - Optimized model version
-- **best_model4.keras** - Additional variant
-- **best_model_combo.keras** - Combined architecture
-- **best_model_dropout.keras** - Model with dropout regularization
-- **best_model_threshold.keras** - Threshold-optimized model
-- **saved_model/** - SavedModel format for TensorFlow Serving
+- **models/best_model.keras** - Primary trained model
+- **models/best_model2.keras** - Alternative model variant
+- **models/best_model3.keras** - Optimized model version
+- **models/best_model4.keras** - Additional variant
+- **models/best_model_combo.keras** - Combined architecture
+- **models/best_model_dropout.keras** - Model with dropout regularization
+- **models/best_model_threshold.keras** - Threshold-optimized model
+- **models/saved_model/** - SavedModel format for TensorFlow Serving
 
 ### Scripts
-- **fall_detection_server.py** - Main audio detection server
-- **fall_detectio _server2.py** - Alternative server implementation
-- **test.py** - Testing script
+- **train_sound_model.py** - Trains the spectrogram CNN (GroupKFold split)
+- **train_sound_model_v2.py** - Training variant with classification report and confusion matrix
+- **live_audio_test.py** - Records 3 s from the microphone and classifies it
 
 ### Data Files
-- **X.npy** - Preprocessed spectrogram features
-- **y.npy** - Labels (fall/non-fall)
-- **live_input.wav** - Sample audio file
+- **data/X.npy** - Preprocessed spectrogram features
+- **data/y.npy** - Labels (fall/non-fall)
+- **samples/live_input.wav** - Sample audio file
 
 ### Templates
 - **templates/index.html** - Web interface template
@@ -82,29 +82,26 @@ This directory contains the audio-based fall detection system using spectrogram 
 
 ## 🚀 Usage
 
-### Running the Detection Server
+### Training the model
+
+Set `dataset_dir` at the bottom of the script to your folder of labelled `.wav` files, then:
 
 ```bash
-python fall_detection_server.py
+python train_sound_model.py
 ```
 
-**Features:**
-- Live audio capture from microphone
-- Real-time spectrogram generation
-- Continuous fall detection
-- Web interface for monitoring
-- Audio evidence saving
+- Converts each clip to a 64×64 log spectrogram
+- Splits with GroupKFold so recordings from the same source never appear in both train and validation
+- Saves the best checkpoint to `models/`
 
-### Testing
+### Live microphone test
 
 ```bash
-python test.py
+python live_audio_test.py
 ```
 
-**Purpose:**
-- Test model with sample audio
-- Validate preprocessing pipeline
-- Check model performance
+- Records 3 seconds from the microphone
+- Classifies it with `models/best_model3.keras`
 
 ## 🔧 Configuration
 
@@ -158,12 +155,12 @@ spec_resize_shape = (64, 64)
 
 ### Model Variants
 
-- **best_model.keras** - Base architecture
-- **best_model2.keras** - Improved architecture
-- **best_model3.keras** - Optimized version
-- **best_model_combo.keras** - Combined features
-- **best_model_dropout.keras** - With dropout
-- **best_model_threshold.keras** - Threshold optimized
+- **models/best_model.keras** - Base architecture
+- **models/best_model2.keras** - Improved architecture
+- **models/best_model3.keras** - Optimized version
+- **models/best_model_combo.keras** - Combined features
+- **models/best_model_dropout.keras** - With dropout
+- **models/best_model_threshold.keras** - Threshold optimized
 
 ## 🎯 Key Features
 

@@ -1,3 +1,4 @@
+import os
 import sounddevice as sd
 import numpy as np
 import tensorflow as tf
@@ -5,7 +6,7 @@ from scipy.signal import spectrogram
 import cv2
 
 # Load the trained model
-model = tf.keras.models.load_model("best_model3.keras")
+model = tf.keras.models.load_model(os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "best_model3.keras"))
 
 # Settings
 duration = 3  # seconds

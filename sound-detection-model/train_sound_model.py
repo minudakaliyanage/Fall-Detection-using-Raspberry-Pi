@@ -75,7 +75,7 @@ if __name__ == "__main__":
         break  # use the first fold only
 
     model = build_model()
-    checkpoint = tf.keras.callbacks.ModelCheckpoint("best_model2.keras", monitor='val_accuracy', save_best_only=True, verbose=1)
+    checkpoint = tf.keras.callbacks.ModelCheckpoint(os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "best_model2.keras"), monitor='val_accuracy', save_best_only=True, verbose=1)
 
     model.fit(X_train_spec, y_train,
               validation_data=(X_val_spec, y_val),

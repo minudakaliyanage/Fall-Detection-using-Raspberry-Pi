@@ -41,9 +41,9 @@ BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
 class FallDetectionApp:
     def __init__(self):
         # Initialize variables
-        self.tflite_model_path = "Fall-detector-lite.tflite"
-        self.yolov5_pt_path = "yolov5s.pt"
-        self.sound_model_path = "best_model3.keras"
+        self.tflite_model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "Fall-detector-lite.tflite")
+        self.yolov5_pt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "yolov5s.pt")
+        self.sound_model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "sound-detection-model", "models", "best_model3.keras")
         self.capture_dir = "../fall_captures"
         self.is_running = False
         self.consecutive_fall_frames = 0

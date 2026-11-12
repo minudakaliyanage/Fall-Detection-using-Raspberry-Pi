@@ -7,17 +7,17 @@ This directory contains the video-based fall detection system using computer vis
 ## 📁 Contents
 
 ### Model Files
-- **Fall-Detector.h5** - Full TensorFlow model (training)
-- **Fall-detector-lite.tflite** - TensorFlow Lite model (deployment)
-- **yolov5s.pt** - YOLOv5 weights for object detection
+- **models/Fall-Detector.h5** - Full TensorFlow model (training)
+- **models/Fall-detector-lite.tflite** - TensorFlow Lite model (deployment)
+- **models/yolov5s.pt** - YOLOv5 weights for object detection
 
 ### Scripts
-- **real-time detector.py** - Real-time fall detection from camera
-- **video-detector.py** - Fall detection from video files
-- **Model.ipynb** - Model training and development notebook
+- **real_time_detector.py** - Real-time fall detection from camera
+- **video_detector.py** - Fall detection from video files
+- **train_fall_classifier.ipynb** - Model training and development notebook
 
 ### Data
-- **my-video.mp4** - Sample video for testing
+- **samples/my-video.mp4** - Sample video for testing
 
 ## 🏗️ Model Architecture
 
@@ -71,7 +71,7 @@ This directory contains the video-based fall detection system using computer vis
 ### Real-Time Detection
 
 ```bash
-python "real-time detector.py"
+python real_time_detector.py
 ```
 
 **Features:**
@@ -92,10 +92,10 @@ python "real-time detector.py"
 ### Model Parameters
 ```python
 # TensorFlow Lite model
-tflite_model_path = "Fall-detector-lite.tflite"
+tflite_model_path = "models/Fall-detector-lite.tflite"
 
 # YOLOv5 model
-yolov5_pt_path = "yolov5s.pt"
+yolov5_pt_path = "models/yolov5s.pt"
 
 # Detection settings
 consecutive_fall_frames = 5  # Frames to confirm fall
@@ -109,7 +109,7 @@ confidence_threshold = 0.7   # Minimum confidence
 
 ## 📊 Model Training
 
-### Training Process (Model.ipynb)
+### Training Process (train_fall_classifier.ipynb)
 
 1. **Data Preparation**
    - Load Roboflow dataset

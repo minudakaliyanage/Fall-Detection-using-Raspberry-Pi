@@ -77,28 +77,31 @@ A comprehensive **Edge AI application** for real-time fall detection using Raspb
 - **Cloud Services:** AWS S3, Azure Blob Storage
 
 ### AI Models
-- **Video Model:** TensorFlow Lite (Fall-detector-lite.tflite)
-- **Object Detection:** YOLOv5 (yolov5s.pt)
-- **Audio Model:** Keras CNN (best_model*.keras)
+- **Video Model:** TensorFlow Lite (`models/Fall-detector-lite.tflite`)
+- **Object Detection:** YOLOv5 (`models/yolov5s.pt`)
+- **Audio Model:** Keras CNN (`models/best_model*.keras`)
 
 ## 📁 Repository Structure
 
 ```
 Fall-Detection-using-Raspberry-Pi/
-├── detection-model/              # Video-based fall detection
-│   ├── Model.ipynb              # Model training notebook
-│   ├── Fall-Detector.h5         # Full TensorFlow model
-│   ├── Fall-detector-lite.tflite # TensorFlow Lite model
-│   ├── yolov5s.pt               # YOLOv5 weights
-│   ├── real-time detector.py    # Real-time detection script
-│   └── video-detector.py        # Video file detection
+├── detection-model/                  # Video-based fall detection
+│   ├── real_time_detector.py         # Live camera + mic detection on the Pi
+│   ├── video_detector.py             # Run detection on a video file
+│   ├── train_fall_classifier.ipynb   # MobileNetV2 training + INT8 TFLite export
+│   ├── models/                       # Fall-Detector.h5, Fall-detector-lite.tflite, yolov5s.pt
+│   └── samples/                      # my-video.mp4 test clip
 │
-├── sound-detection-model/        # Audio-based fall detection
-│   ├── fall_detection_server.py # Audio detection server
-│   ├── best_model*.keras        # Trained audio models
-│   ├── saved_model/             # Saved model format
-│   ├── templates/               # HTML templates
-│   └──X.npy, y.npy            # Preprocessed data
+├── sound-detection-model/            # Audio-based fall detection
+│   ├── train_sound_model.py          # Spectrogram CNN training (GroupKFold)
+│   ├── train_sound_model_v2.py       # Variant with evaluation report + confusion matrix
+│   ├── live_audio_test.py            # Record 3 s from the mic and classify
+│   ├── models/                       # best_model*.keras + SavedModel export
+│   ├── data/                         # X.npy, y.npy preprocessed spectrograms
+│   ├── samples/                      # live_input.wav
+│   └── templates/                    # HTML template
+│
+├── assets/                           # README images
 │
 └── edge-frontend/                # Web monitoring dashboard
     ├── src/
@@ -169,13 +172,14 @@ Fall-Detection-using-Raspberry-Pi/
 #### Video Detection
 ```bash
 cd detection-model
-python "real-time detector.py"
+python real_time_detector.py
 ```
 
 #### Audio Detection
 ```bash
 cd sound-detection-model
-python fall_detection_server.py
+python live_audio_test.py        # live mic test
+python train_sound_model.py      # retrain (set dataset_dir first)
 ```
 
 #### Web Dashboard
